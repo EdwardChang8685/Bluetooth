@@ -25,12 +25,46 @@ struct ContentView: View {
                     DeviceDetailView(manager: bluetoothManager)
                 } else {
                     // 未連線：顯示掃描列表
-                    ScanListView(
-                        manager: bluetoothManager,
-                        onDeviceSelected: { device in
-                            bluetoothManager.connect(to: device)
+                    VStack(spacing: 0) {
+                        // TaiDoc 儀器入口
+                        NavigationLink {
+                            TaiDocMeterView()
+                        } label: {
+                            HStack {
+                                Image(systemName: "heart.text.clipboard")
+                                    .font(.title2)
+                                    .foregroundColor(.white)
+                                    .frame(width: 40, height: 40)
+                                    .background(Color.red)
+                                    .cornerRadius(8)
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("TaiDoc 儀器配對")
+                                        .font(.headline)
+                                    Text("管理伏爾泰醫療儀器的配對與連線")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding()
+                            .background(Color(.systemBackground))
                         }
-                    )
+                        .buttonStyle(.plain)
+
+                        Divider()
+
+                        ScanListView(
+                            manager: bluetoothManager,
+                            onDeviceSelected: { device in
+                                bluetoothManager.connect(to: device)
+                            }
+                        )
+                    }
                 }
             }
             .navigationTitle(bluetoothManager.connectionState == .disconnected ? "藍牙掃描器" : "裝置詳情")
